@@ -4,6 +4,7 @@ description: >
   Writes a structured ADR from conversation history using a standard template. Trigger when user
   says "write this up as an ADR", "capture this decision", "create an ADR", or similar. Also
   trigger when user asks for a summary after discussing architecture, design options, or trade-offs.
+disable-model-invocation: true
 ---
 
 # ADR Writer

@@ -8,6 +8,7 @@ description: >
   analysis, compliance with architectural principles. Not for: debugging issues,
   fixing bugs, refactoring individual methods, performance tuning,
   setup/configuration guidance, or reviewing non-Java codebases.
+disable-model-invocation: true
 ---
 
 # Java Code & Architecture Review
