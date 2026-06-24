@@ -30,3 +30,12 @@ $ npx install skills@latest add casparderksen/skills <skill> ...
 ### Architecture
 
 - [adr-writer](architecture/adr-writer/SKILL.md) - Formulates the outcome of a conversation into a structured Architectural Decision Record (ADR) using a standardised template.
+
+### Agents
+
+- [refactor-claude-md](agents/refactor-claude-md/SKILL.md) — Refactors CLAUDE.md files to be lean and session-focused, moving reference docs and design decisions out via progressive disclosure. Inspired by Matt Pocock.
+
+## AI Disclosure
+
+This project uses artificial intelligence tools for research, coding, or documentation. All  final content
+was  reviewed, edited, and validated by the human author before publication.
