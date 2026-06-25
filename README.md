@@ -33,7 +33,7 @@ $ npx install skills@latest add casparderksen/skills --skill <skill> ...
 
 ### Agents
 
-- [adr-for-agents](agents/adr-for-agents/SKILL.md) — Writes minimal, outcome-focused ADRs intended to be loaded as agent context, not read by humans.
+- [adr-for-agents](agents/adr-for-agents/SKILL.md) — Writes minimal, outcome-focused ADRs intended to be loaded as agent context, not read by humans. Inspired by Matt Pocock.
 - [refactor-claude-md](agents/refactor-claude-md/SKILL.md) — Refactors CLAUDE.md files to be lean and session-focused, moving reference docs and design decisions out via progressive disclosure. Inspired by Matt Pocock.
 
 ## AI Disclosure
