@@ -6,6 +6,7 @@ description: >
   when a CLAUDE.md exceeds ~100 lines and contains design decisions, reference docs, or
   content that doesn't need to be in every session. Also trigger when user says "my
   CLAUDE.md is too long", "move stuff out of CLAUDE.md", or "set up progressive disclosure".
+disable-model-invocation: true
 ---
 
 # Refactor CLAUDE.md
@@ -36,6 +37,12 @@ Everything else goes elsewhere and is loaded on demand.
 
 ---
 
+## Output style
+
+CLAUDE.md and all generated docs (ADRs, reference docs) must be terse and direct. Drop filler words and unnecessary preamble. Tables and lists beat paragraphs. If something can be said in fewer words, use fewer.
+
+---
+
 ## Workflow
 
 ### Step 1 — Read and classify
@@ -61,18 +68,7 @@ One file per topic. Start with a one-line summary. Keep them focused.
 
 ### Step 3 — Write ADRs
 
-For each chunk classified as a design decision, evaluate against all three criteria:
-
-1. **Hard to reverse** — the cost of changing your mind later is meaningful
-2. **Surprising without context** — a future reader will wonder "why did they do it this way?"
-3. **The result of a real trade-off** — genuine alternatives existed and one was chosen for specific reasons
-
-If any criterion is missing, skip the ADR. When all three hold, write an ADR using `ADR-TEMPLATE.md` in this skill directory.
-
-ADRs describe the **current design** — not history, change logs, or how things evolved. Write as if explaining the present state to someone who wasn't there.
-
-Scan `docs/adr/` for the highest existing number; increment by one.  
-Create `docs/adr/` lazily — only when the first ADR is needed.
+For each chunk classified as a design decision, use the `adr-for-agents` skill to evaluate whether it warrants an ADR and to write it.
 
 ### Step 4 — Rewrite CLAUDE.md
 

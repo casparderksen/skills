@@ -1,12 +1,12 @@
 ---
 name: adr-writer
 description: >
-  Writes a structured ADR from conversation history using a standard template. Use this skill
-  whenever a technical or architectural decision has been discussed — even informally. Trigger on
-  "write this up as an ADR", "capture this decision", "create an ADR", "document this", "let's
-  record this", "should we write this up?", or any request to summarise or save the outcome of
-  an architecture, design, or technology discussion. When in doubt, trigger — it's better to
-  offer the ADR and have the user decline than to miss documenting a real decision.
+  Write a structured, human-readable ADR from a conversation with the user. Trigger on direct
+  user requests: "write this up as an ADR", "capture this decision", "create an ADR",
+  "document this", "let's record this", "should we write this up?", or any request to
+  summarise or save the outcome of an architecture, design, or technology discussion.
+  When in doubt, trigger — better to offer and have the user decline than to miss a real
+  decision. Do NOT use when the ADR audience is agents — use adr-for-agents for that.
 ---
 
 # ADR Writer
