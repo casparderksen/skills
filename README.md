@@ -16,7 +16,7 @@ $ npx install skills@latest add casparderksen/skills
 Or to install individual skills:
 
 ```sh
-$ npx install skills@latest add casparderksen/skills <skill> ...
+$ npx install skills@latest add casparderksen/skills --skill <skill> ...
 ```
 
 ## Overview
