@@ -1,10 +1,12 @@
 ---
 name: adr-writer
 description: >
-  Writes a structured ADR from conversation history using a standard template. Trigger when user
-  says "write this up as an ADR", "capture this decision", "create an ADR", or similar. Also
-  trigger when user asks for a summary after discussing architecture, design options, or trade-offs.
-disable-model-invocation: true
+  Writes a structured ADR from conversation history using a standard template. Use this skill
+  whenever a technical or architectural decision has been discussed — even informally. Trigger on
+  "write this up as an ADR", "capture this decision", "create an ADR", "document this", "let's
+  record this", "should we write this up?", or any request to summarise or save the outcome of
+  an architecture, design, or technology discussion. When in doubt, trigger — it's better to
+  offer the ADR and have the user decline than to miss documenting a real decision.
 ---
 
 # ADR Writer
@@ -27,9 +29,19 @@ Trigger this skill when:
 
 ## Workflow
 
+### Step 0 — Check for decision content
+
+Before doing anything else, scan the conversation for signs of a decision: a question being
+resolved, options being weighed, or a choice being made. If none is present, stop and say:
+
+> "I don't see a decision discussed yet. Describe the decision you want to record, and I'll
+> write the ADR."
+
+Don't proceed to Step 1 until there is something to extract.
+
 ### Step 1 — Extract decision content from the conversation
 
-Read the conversation history and identify:
+Read the conversation history and identify whatever is already present:
 
 | Element | Where to look |
 |---|---|
@@ -41,33 +53,73 @@ Read the conversation history and identify:
 | **Positive consequences** | Benefits, improvements, or capabilities unlocked by the decision |
 | **Negative consequences** | Trade-offs, costs, risks, or obligations introduced |
 | **Constraints** | Any hard rules the implementation must respect |
-| **Related decisions** | Other ADRs or decisions mentioned or implied |
 | **References** | Standards, tools, articles, or documents cited |
 
-If any critical element is missing or ambiguous, ask the user one focused question before
-proceeding. Do not ask multiple questions at once.
+Note gaps — elements that are missing, vague, or underdeveloped. You will address them in Step 2.
 
-### Step 2 — Determine ADR number and save location
+### Step 2 — Interview the user to clarify and sharpen the decision
 
-Scan the project for existing ADRs by searching for files matching `ADR-*.md` in common
-locations (`docs/adr/`, `decisions/`, `architecture/`, repo root). Infer the next sequence
-number and use the discovered directory as the save location.
+The goal of this step is to reach a well-defined ADR foundation before writing anything. By the
+end, the following should be true:
+
+- **Problem**: clearly stated — what question is being answered, and why it matters
+- **Drivers**: named and labelled — 2–4 distinct criteria that guided the decision
+- **Options**: 2–4 concrete alternatives identified, including the one chosen
+- **Constraints**: any hard rules or non-negotiables are surfaced
+
+If a goal genuinely cannot be met (e.g., constraints are unknown at this stage), document it as
+"not yet identified" and proceed rather than blocking.
+
+#### Sub-step 2a — Scan for related decisions
+
+Before asking the user anything, scan the project for existing ADRs (`ADR-*.md` in `docs/adr/`,
+`decisions/`, `architecture/`, repo root). Keep any matches — you will present relevant ones to
+the user during the interview as candidate related decisions.
+
+#### Sub-step 2b — Present what you have, then fill gaps
+
+Open by showing the user what you extracted from the conversation — even if partial. This gives
+them something concrete to correct rather than a blank page.
+
+Then work through gaps. For each gap:
+
+1. **For open-ended gaps** (e.g., "what problem prompted this?"): ask one focused question. Do
+   not ask multiple open-ended questions at once.
+
+2. **For enumerable gaps** (drivers, options, constraints): present a candidate list drawn from
+   domain knowledge and common practice for this type of decision, labelled as such. Ask the
+   user which apply, which to drop, and what to add. Project-specific facts — context, history,
+   existing constraints — must come from the user. Never treat a candidate as confirmed without
+   a user response.
+
+3. **For related decisions**: present the ADRs found in 2a that seem relevant. Ask the user to
+   confirm which are genuinely related.
+
+Keep going until all four goals are met or acknowledged as unknown. The user owns the decision —
+if they are uncertain about something, help them reason through it, but do not resolve it for
+them.
+
+### Step 3 — Determine ADR number and save location
+
+Use the directory discovered during the Step 2 ADR scan. Infer the next sequence number from
+existing files.
 
 Confirm with one question: "I'll save this as ADR-0005 in `docs/adr/` — correct?"
 
-If no existing ADRs are found, ask the user for both the number and preferred location.
+If no existing ADRs were found, ask the user for both the number and preferred location.
 
 Status defaults to `Proposed`. Only change if the user specifies otherwise.
 
-### Step 3 — Fill in the template
+### Step 4 — Fill in the template
 
-Populate every section of the template below. Follow these rules:
+Load `ADR_TEMPLATE.md` from this skill directory. Populate every section, replacing each
+`{placeholder}` with content derived from the conversation. Follow these rules:
 
 - **Management summary**: Write 2–4 non-technical sentences. Explain *what was decided* and *why
   it matters*, without acronyms or implementation detail. This section is for non-technical
   stakeholders, not engineers.
 - **Context**: Summarise the situation and requirements as bullet points, then close with the
-  central question in bold.
+  central question as a plain sentence.
 - **Decision Drivers**: Extract named, labelled drivers. Each driver must have a name and a
   one-sentence explanation of why it matters. Derive drivers from the conversation even if the
   user did not label them explicitly.
@@ -87,7 +139,7 @@ Populate every section of the template below. Follow these rules:
 - **References**: List standards, tools, or documents mentioned. Use markdown link syntax where
   a URL is known.
 
-### Step 4 — Review with the user
+### Step 5 — Review with the user
 
 Ask the user: "Would you like to review this section-by-section (default) or see the whole
 document at once?"
@@ -98,7 +150,7 @@ document at once?"
 - **Whole document**: Present the full draft, collect feedback in one round, apply all changes,
   confirm the result.
 
-### Step 5 — Output the ADR
+### Step 6 — Output the ADR
 
 Before producing final output, verify:
 
@@ -112,14 +164,7 @@ Before producing final output, verify:
 - [ ] Filename follows the `ADR-{number}-{kebab-case-title}.md` convention
 
 Produce the complete ADR as a markdown code block in the chat, then save it to the location
-confirmed in Step 2.
+confirmed in Step 3.
 
 Filename: `ADR-{number}-{kebab-case-title}.md` (e.g. `ADR-0001-bi-temporal-fact-storage.md`)
 
----
-
-## Template
-
-See `ADR_TEMPLATE.md` in this skill directory for the full template. Load it
-and populate every section, replacing each `{placeholder}` with content derived
-from the conversation.
